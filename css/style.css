@@ -1,0 +1,107 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700);
+@import url(http://fonts.googleapis.com/css?family=Volkhov:400italic);
+/* var text-decoration */
+/*--
+	Common Css
+--*/
+body {
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: #f0fbfb;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Roboto', sans-serif;
+}
+h2 {
+  font-size: 30px;
+  font-weight: 400;
+  color: #345;
+}
+h3 {
+  font-size: 28px;
+  font-weight: 300;
+}
+p {
+  font-size: 15px;
+  line-height: 28px;
+}
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+a,
+a:active,
+a:focus,
+a:active {
+  text-decoration: none !important;
+}
+.section-title {
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+.section-title h2 {
+  text-transform: uppercase;
+  font-size: 28px;
+  font-weight: 600;
+}
+.section-title p {
+  font-family: 'Volkhov', serif;
+  font-style: italic;
+  color: #666;
+}
+   
+#style-form {
+  padding-top: 70px;
+  padding-bottom: 35px;
+  width: 35%;
+  margin-left: 30%;
+}
+
+input {
+font-family: 'Open Sans', sans-serif;
+font-size: 18px;
+padding-left: 5px;
+}
+
+
+#style-form .block form .form-group {
+  padding-bottom: 15px;
+  margin: 0px;
+}
+#style-form .block form .form-group .form-control {
+  background: #F6F8FA;
+  height: 60px;
+  border: 2px solid #EEF2F6;
+  box-shadow: none;
+  width: 100%;
+}
+
+#style-form .block button {
+  width: 102%;
+  height: 60px;
+  background: #345;
+  border: none;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  cursor:pointer;
+}
+
+.btn-logoff {
+  margin-left: 40%;
+  padding: 15px 35px;
+  border: none;
+  background-color: #345;
+  font-size: 15px;
+  color: white;
+  margin-top: 30px;
+}
+
+
