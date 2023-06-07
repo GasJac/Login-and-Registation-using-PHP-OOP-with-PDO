@@ -1,19 +1,31 @@
 <?php
 
-include_once 'dbconnect.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once 'DBConnect.php';
+require_once 'UserManager.php';
+require_once 'index.php';
+
+$user = new UserManager($username, $email, $password);
 
 //verify if the user as passed the login process
+
   if(!$user->isLogged()){
     header("Location: index.php");
   }
 //store users informations
+$dbConnect = new DBConnect(DB_SERVER, DB_DATABASE, DB_USERNAME, DB_PASSWORD);
+$connect = $dbConnect->getConnection();
 $userId = $_SESSION['user_session'];
 $stmt = $connect->prepare("SELECT * FROM users WHERE id=:userId");
 $stmt->execute(array(":userId"=>$userId));
 $userRow=$stmt->fetch(PDO::FETCH_ASSOC);
 
+
 //logoff on form submit
-logoffAction($user);
+$user->logoffAction($user);
 ?>
 
 <!DOCTYPE html>

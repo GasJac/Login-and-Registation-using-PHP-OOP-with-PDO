@@ -1,49 +1,60 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+session_start();
+
+require_once 'UserManager.php';
+
 //begin login processing script
-require_once 'dbconnect.php';
+
+
 //initialize variable to empty strings and login variable to false
 $errUsernameEmail = $errPassword = $errCredentials = "";
+
 $usernameEmail = $password = "";
 
 //sanitize data inputs   
-function test_input($data) {
-   $data = trim($data);
-   $data = stripslashes($data);
-   $data = htmlspecialchars($data);
-   $data = (filter_var($data, FILTER_SANITIZE_STRING));
-   return $data;
-}  
+function test_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    $data = (filter_var($data, FILTER_SANITIZE_STRING));
+    return $data;
+}
 
 // Check if submit button is entered
-if(isset($_POST['submit'])){
-  
-  // Check if username or email is set 
-  if (empty($_POST["usernameEmail"])) {
-    $errUsernameEmail = "Your username or email is required.";
-  } 
-  else{
-    $username = test_input($_POST['usernameEmail']);
-    $email = test_input($_POST['usernameEmail']);
-  }
-  
-  // Check if password is set
-  if (empty($_POST["password"])) {
-    $errPassword = "Your password is required";
-  } 
-  else{
-    $password = test_input($_POST['password']);
-  }
-  
-// If there are no errors on the form and username or email match the password, redirect user to dashboard
-  if (!$errUsernameEmail && !$errPassword) {
-    if($user->login($username,$email,$password)){
-      header("Location: home.php");
+if (isset($_POST['submit'])) {
+
+    // Check if username or email is set 
+    if (empty($_POST["usernameEmail"])) {
+        $errUsernameEmail = "Your username or email is required.";
+    } else {
+        $username = test_input($_POST['usernameEmail']);
+        $email = test_input($_POST['usernameEmail']);
     }
-    else{
-      $errCredentials = "Wrong credentials!";
-    } 
-  }
+
+    // Check if password is set
+    if (empty($_POST["password"])) {
+        $errPassword = "Your password is required";
+    } else {
+        $password = test_input($_POST['password']);
+    }
+
+    // If there are no errors on the form and username or email match the password, redirect user to dashboard
+    if (!$errUsernameEmail && !$errPassword) {
+      $user = new UserManager($username, $email, $password);
+        if ($user->login()) {
+            session_start();
+            $_SESSION['user'] = serialize($user);
+            header("Location: home.php");
+        } else {
+            $errCredentials = "Wrong credentials!";
+        }
+    }
 }
 //end login processing script
 

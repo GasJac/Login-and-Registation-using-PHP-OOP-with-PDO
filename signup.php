@@ -1,62 +1,72 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-//begin signup processing script
-require_once 'dbconnect.php';
-//initialize variables to empty strings
+// Begin signup processing script
+require_once 'UserManager.php';
+require_once 'DBConnect.php';
+
+// Initialize variables to empty strings
 $errUsername = $errEmail = $errPassword = $errCredentialsTaken = "";
 $username = $email = $password = "";
 
-//sanitize data inputs   
-function test_input($data) {
-   $data = trim($data);
-   $data = stripslashes($data);
-   $data = htmlspecialchars($data);
-   $data = (filter_var($data, FILTER_SANITIZE_STRING));
-   return $data;
-}  
+// Sanitize data inputs
 
-// Check if submit button is entered
-if(isset($_POST['submit'])){
-  
-  // Check if username is set 
-  if (empty($_POST["username"])) {
-    $errUsername = "Username is required.";
-  } 
-  else{
-   $username = test_input($_POST["username"]);
-  }
-  
-  // Check if email is set and valid 
-  if (empty($_POST["email"])) {
-    $errEmail = "Email is required.";
-  } 
-  else{
-    $email = test_input($_POST["email"]);
-   // check if e-mail address is in a valid format
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $errEmail ="Please insert a valid email address.";
+
+// Sanitize data inputs
+function test_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    $data = (filter_var($data, FILTER_SANITIZE_STRING));
+    return $data;
+}
+
+// Check if submit button is clicked
+if (isset($_POST['submit'])) {
+
+    // Check if username is set
+    if (empty($_POST["username"])) {
+        $errUsername = "Username is required.";
+    } else {
+        $username = test_input($_POST["username"]);
     }
-  }
-  
-  // Check if password is set
-  if (empty($_POST["password"])) {
-    $errPassword = "A password is required";
-  } 
-  else{
-    $password = test_input($_POST["password"]);
-  }
-  
-// If there are no errors on the form and username and email are not already taken, redirect user to login page
-  if (!$errUsername && !$errEmail && !$errPassword) {
-    if($user->userRegistration($username,$email,$password)){
-      header("Location: index.php");
+
+    // Check if email is set and valid
+    if (empty($_POST["email"])) {
+        $errEmail = "Email is required.";
+    } else {
+        $email = test_input($_POST["email"]);
+        // Check if email address is in a valid format
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errEmail = "Please insert a valid email address.";
+        }
     }
-    else{
-      $errCredentialsTaken = "Username or email already taken";
-    } 
+
+    // Check if password is set
+    if (empty($_POST["password"])) {
+        $errPassword = "A password is required";
+    } else {
+        $password = test_input($_POST["password"]);
+    }
+
+    // If there are no errors on the form and username and email are not already taken, redirect user to the login page
+    if (empty($errUsername) && empty($errEmail) && empty($errPassword)) {
+      
+  
+      $user = new UserManager($username, $email, $password);
+      if ($user->userRegistration()) {
+          session_start();
+          $_SESSION['user'] = serialize($user);
+          header("Location: index.php");
+      } else {
+          $errCredentialsTaken = "Username or email already taken";
+      }
   }
 }
-//end signup processing script
+// End signup processing script
 
 ?>
 <!DOCTYPE html>
